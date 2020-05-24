@@ -1,55 +1,30 @@
-# This file is a template, and might need editing before it works on your project.
-# use the official gcc image, based on debian
-# can use verions as well, like gcc:5.2
-# see https://hub.docker.com/_/gcc/
-image: ubuntu
+image: gcc
+
+    
+stages:
+    - build
+    - test
 
 build:
-  stage: build
-  # instead of calling g++ directly you can also use some build toolkit like make
-  # install the necessary build tools when needed
-  # before_script:
-  #   - apt update && apt -y install make autoconf
-  before_script:
-   - apt-get update --yes
-   - apt-get -y install g++
-   - apt-get -y install libgtest-dev
-   - apt-get -y install cmake
-   - pwd
-   - cd /usr/src/gtest
-   - cmake CMakeLists.txt
-   - make
-   - cp *.a /usr/lib
-   - cd /builds/lsanabri/cache_project_baseline_IE521
-  script:
-    - mkdir build
+    stage: build
+    before_script:
+    - apt-get update --yes
+    - apt-get install --yes cmake
+    - apt-get install --yes libgtest-dev
+    script:
+    - echo "Build Stage"
+    - mkdir -p build
     - cd build
     - cmake ..
-    - cmake --build . --target cache
-    - cmake --build . --target cachetest
+    - make cache 
+    - make cachetest
+    artifacts:
+        paths:
+        - build/
 
-# run tests using the binary built before
 test:
   stage: test
-  before_script:
-   - apt-get update --yes
-   - apt-get -y install g++
-   - apt-get -y install libgtest-dev
-   - apt-get -y install cmake
-   - pwd
-   - cd /usr/src/gtest
-   - cmake CMakeLists.txt
-   - make
-   - cp *.a /usr/lib
-   - cd /builds/lsanabri/cache_project_baseline_IE521
-   
   script:
-    - mkdir build
+    - echo "Test Stage"
     - cd build
-    - cmake ..
-    - cmake --build . --target l1cache
-    - cmake --build . --target cachetest
-    - pwd
-    - ls 
     - ./test/cachetest
-
