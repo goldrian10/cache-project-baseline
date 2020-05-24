@@ -40,7 +40,7 @@ Ex: ./test/cachetest  --gtest_filter=L1cache.hit_miss_srrip --gtest_repeat=2
   ./test/cachetest  --gtest_filter=L1cache.hit_miss_srrip --gtest_random_seed=2126
 ```  
 To enable further debug on the test you need to enable debug_on variable, on your terminal
-do:
+run:
 ```
 export TEST_DEBUG=1
 ```
