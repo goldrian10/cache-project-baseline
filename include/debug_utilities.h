@@ -11,6 +11,8 @@
 #define DEBUG(x) if (debug_on) printf("%s\n",#x)
 #define YEL   "\x1B[33m"
 
+
+#define RAND -1
 typedef struct{
   u_int original_address;
   // L1
@@ -55,22 +57,6 @@ typedef struct {
 }line_info;
 
 
-typedef struct{
-  bool valid ;
-  bool dirty;
-  int tag ;
-  int index;
-  int rp_value ;
-}entry;
-
-
-typedef struct{
-  enum miss_hit_status miss_hit;
-  bool dirty_eviction;
-  int  evicted_address;
-  bool valid_victimization;
-}operation_result;
-
 /* FUNCTIONS */
 
 /* Get enviroment var */
@@ -92,3 +78,4 @@ line_info random_access(int loadstore=-1);
 entry_info generate_entry_info(sizes sizes);
 
 #endif
+
