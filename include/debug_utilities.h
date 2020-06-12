@@ -11,6 +11,66 @@
 #define DEBUG(x) if (debug_on) printf("%s\n",#x)
 #define YEL   "\x1B[33m"
 
+typedef struct{
+  u_int original_address;
+  // L1
+	u_int l1_tag;
+	u_int l1_idx;
+	u_int l1_offset;
+	u_int l1_assoc;
+  // L2
+	u_int l2_tag;
+	u_int l2_idx;
+	u_int l2_offset;
+	u_int l2_assoc;
+  // VC
+  u_int vc_assoc;
+}entry_info;
+
+
+typedef struct{
+  u_int l1_tag_bits;    //
+  u_int l1_offset_bits; //
+  u_int l1_index_bits;  //
+  u_int l2_tag_bits;    //
+  u_int l2_offset_bits; //
+  u_int l2_index_bits;  //
+  u_int vc_assoc;       //
+  u_int l1_assoc;
+  u_int l2_assoc;
+}sizes;
+
+
+typedef struct{
+  u_int t;   //size of the cache in kilobytes.
+  u_int l;   //size of the cache block in bytes.
+  u_int a;   //associativity.
+  u_int opt; //optimization: victim cache or maltilevel cache.
+} parameters;
+
+typedef struct {
+  u_int  address;    //
+  u_int loadstore;  //
+  u_int ic;         //
+}line_info;
+
+
+typedef struct{
+  bool valid ;
+  bool dirty;
+  int tag ;
+  int index;
+  int rp_value ;
+}entry;
+
+
+typedef struct{
+  enum miss_hit_status miss_hit;
+  bool dirty_eviction;
+  int  evicted_address;
+  bool valid_victimization;
+}operation_result;
+
 /* FUNCTIONS */
 
 /* Get enviroment var */
