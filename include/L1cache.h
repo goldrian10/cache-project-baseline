@@ -8,66 +8,10 @@
 #define L1CACHE_H
 
 #include <netinet/in.h> 
+#include "utilities.h"
 /* 
  * ENUMERATIONS 
  */
-
-/* Return Values */
-enum returns_types {
- OK,
- PARAM,
- ERROR
-};
-
-/* Represent the cache replacement policy */
-enum replacement_policy{
- LRU,
- NRU,
- RRIP,
- RANDOM 
-};
-
-enum miss_hit_status {
- MISS_LOAD,
- MISS_STORE,
- HIT_LOAD,
- HIT_STORE
-};
-
-/*
- * STRUCTS
- */
-
-/* Cache entry metadata */
-
-struct entry {
- /* Indicates if the line is valid */
- bool valid;
-
- /* Indicates if the entry was written */
- bool dirty;
-
- /* Tag value */
- int tag;
-
- /* Replacement policy value */
- uint8_t rp_value;
-
- /* Prefetch tag, only used in OBL */
- bool obl_tag;
-};
-
-/* Cache replacement policy results */
-struct operation_result {
- /* Result of the operation */
- enum miss_hit_status miss_hit;
-
- /* Set to one if the evicted line was dirty */
- bool dirty_eviction;
-
- /* Block address of the evited line */
- int  evicted_address;
-};
 
 /* Cache params */
 struct cache_params {
@@ -187,3 +131,18 @@ int nru_replacement_policy(int idx,
                            bool debug=false);
 
 #endif
+/*
+ * Invalidates a line in the cache
+ *
+ * [in] tag: tag field of the block
+ * [in] associativity: number of ways of the entry
+ * [in] debug: if set to one debug information is printed
+ *
+ * [in/out] cache_block: cache entry to edit
+ *
+ * return error if tag is not found in cache blocks
+ */
+int l1_line_invalid_set(int tag,
+                        int associativity,
+                        entry* cache_blocks,
+                        bool debug);

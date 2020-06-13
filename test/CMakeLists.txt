@@ -12,6 +12,7 @@ target_sources(cachetest PUBLIC ${CacheSim_SOURCE_DIR}/src/debug_utilities.cpp
 				${CacheSim_SOURCE_DIR}/src/Victimcache.cpp
                                 ${CacheSim_SOURCE_DIR}/src/L1Obl.cpp
 				${CacheSim_SOURCE_DIR}/test/L1cache_test.cpp
+				${CacheSim_SOURCE_DIR}/src/utilities.cpp
 				${CacheSim_SOURCE_DIR}/test/L2cache_test.cpp
 				${CacheSim_SOURCE_DIR}/test/L1Obl_test.cpp
 				${CacheSim_SOURCE_DIR}/test/Victimcache_test.cpp)

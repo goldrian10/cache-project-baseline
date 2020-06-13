@@ -13,8 +13,8 @@
 using namespace std;
 
 class OBLcache : public ::testing::Test{
-   protected:
-	int debug_on;
+  protected:
+	int debug_on = 0;
 	virtual void SetUp()
 	{
 	/* Parse for debug env variable */
@@ -28,12 +28,12 @@ class OBLcache : public ::testing::Test{
  */
 TEST_F(OBLcache,prefetch) {
   int status = OK;
-  struct entry cache_block;
-  struct entry cache_block_obl;
-  struct operation_result l1_result = {};
-  struct operation_result obl_result = {};
+  entry cache_block;
+  entry cache_block_obl;
+  operation_result l1_result = {};
+  operation_result obl_result = {};
   int idx, tag, way = 0;
-  DEBUG(OBL test);
+  DEBUG(debug_on,OBL test);
   status = lru_obl_replacement_policy(idx,
                                       tag,
                                       way,

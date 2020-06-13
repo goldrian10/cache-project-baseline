@@ -11,12 +11,14 @@
  */
 
 /* L1 and VC info */
+/*
 struct l1_vc_entry_info {
 	int l1_tag;
 	int l1_idx;
 	int l1_associativity;
-        int vc_associativity;
+    int vc_associativity;
 };
+*/
 
 /* 
  *  Functions
@@ -36,7 +38,7 @@ struct l1_vc_entry_info {
  * [in/out] vc_result: return the cache operation result in vc (miss_hit_status)
  * [out] result: result of the operation (returns_types)
  */
-int lru_replacement_policy_l1_vc(const l1_vc_entry_info *l1_vc_info,
+int lru_replacement_policy_l1_vc(const entry_info *l1_vc_info,
       	                      	 bool loadstore,
         	                 entry* l1_cache_blocks,
           	                 entry* vc_cache_blocks,
