@@ -1,7 +1,6 @@
 /*
  *  Cache simulation project
  *  Class UCR IE-521
- *  Semester: II-2019
  *
  * Autores:
  *    Julian Morua Vindas B54872
@@ -17,6 +16,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
+#include "L1cache.h"
 
 #define BUFFER_SIZE 32
 #define VC_SIZE 16
@@ -30,48 +30,6 @@ enum optimization_types{
   L2,
   VC
 };
-
-enum load_store{
-  LOAD,
-  STORE
-};
-/* Return Values */
-enum returns_types {
-  OK,
-  PARAM,
-  ERROR,
-  INVALIDATED,
-  NON_INVALIDATED
-};
-
-/* Represent the cache replacement policy */
-enum replacement_policy{
-  LRU,
-  NRU,
-  RRIP,
-  RANDOM
-};
-
-enum miss_hit_status {
-  MISS_LOAD,
-  MISS_STORE,
-  HIT_LOAD,
-  HIT_STORE
-};
-
-/*
- * STRUCTS
- */
-
-/* Cache tag array fields */
-typedef struct{
-  bool valid ;
-  bool dirty;
-  int tag ;
-  int index;
-  int rp_value ;
-  bool obl_tag;
-}entry;
 
 void print_address(u_int addr, const char* msj="");
 
@@ -90,14 +48,6 @@ void print_set(entry* set, int assoc, const char* msj="");
 @param msj is a message to be printed along with the entry for debug purposes.
 */
 
-
-/* Cache replacement policy results */
-typedef struct{
-  enum miss_hit_status miss_hit;
-  bool dirty_eviction;
-  int  evicted_address;
-  bool valid_victimization;
-}operation_result;
 
 void print_result(operation_result results,const char* msj="");
 /**
@@ -159,12 +109,6 @@ typedef struct {
   u_int ic;         //
 }line_info;
 
-line_info get_line_info(char* line);
-/**
-@brief This function reads a line from a trace file and stores its information in the provided line_info structure.
-@param line is the line extracted from the trace file
-@return a line_info structure that contans the loadstore bit, the address and the instruction count.
-*/
 
 typedef struct{
   u_int original_address;
@@ -195,21 +139,5 @@ void print_entry_info(entry_info info, int opt);
 @param info is the entry_info struct
 @param opt is the optimization being used to filter out the unwanted data.
 */
-
-typedef struct statistics{
-  u_int references;
-  u_int L1_misses;
-  u_int L1_hits;
-  u_int L2_misses;
-  u_int L2_hits;
-  u_int global_misses;
-  u_int VC_misses;
-  u_int VC_hits;
-  u_int dirty_evictions;
-} statistics;
-
-void printStats(statistics stats, double exec_time, int opt);
-
-void updateStats(statistics* stats, operation_result* l1_results, operation_result* vc_l2_results, u_int opt);;
 
 #endif

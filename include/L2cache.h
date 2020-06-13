@@ -5,7 +5,6 @@
 #ifndef L2CACHE_H
 #define L2CACHE_H
 
-#include "utilities.h"
 #include "L1cache.h"
 /*
  * STRUCTS

@@ -1,17 +1,72 @@
 /*
  *  Cache simulation project
  *  Class UCR IE-521
- *  Semester: I-2019
 */
 
 #ifndef L1CACHE_H
 #define L1CACHE_H
 
 #include <netinet/in.h> 
-#include "utilities.h"
 /* 
  * ENUMERATIONS 
  */
+
+/* Return Values */
+enum returns_types {
+ OK,
+ PARAM,
+ ERROR
+};
+
+/* Represent the cache replacement policy */
+enum replacement_policy{
+ LRU,
+ NRU,
+ RRIP,
+ RANDOM 
+};
+
+enum miss_hit_status {
+ MISS_LOAD,
+ MISS_STORE,
+ HIT_LOAD,
+ HIT_STORE
+};
+
+/*
+ * STRUCTS
+ */
+
+/* Cache entry metadata */
+
+struct entry {
+ /* Indicates if the line is valid */
+ bool valid;
+
+ /* Indicates if the entry was written */
+ bool dirty;
+
+ /* Tag value */
+ int tag;
+
+ /* Replacement policy value */
+ uint8_t rp_value;
+
+ /* Prefetch tag, only used in OBL */
+ bool obl_tag;
+};
+
+/* Cache replacement policy results */
+struct operation_result {
+ /* Result of the operation */
+ enum miss_hit_status miss_hit;
+
+ /* Set to one if the evicted line was dirty */
+ bool dirty_eviction;
+
+ /* Block address of the evited line */
+ int  evicted_address;
+};
 
 /* Cache params */
 struct cache_params {

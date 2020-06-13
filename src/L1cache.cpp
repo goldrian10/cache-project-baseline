@@ -64,19 +64,3 @@ int nru_replacement_policy(int idx,
 {
    return ERROR;
 }
-
-int l1_line_invalid_set(int tag,
-                        int associativity,
-                        entry* cache_blocks,
-                        bool debug)
-{
-   for (size_t i = 0; i < associativity; i++)
-   {
-      if(cache_blocks[i].tag == tag){
-         if (debug) printf("Tag of invalidated entry : 0x%X\n", cache_blocks->tag);
-         cache_blocks[i].valid = 0;
-         return INVALIDATED;
-      }
-   }
-   return NON_INVALIDATED;
-}
