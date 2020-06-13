@@ -70,6 +70,7 @@ typedef struct{
   int tag ;
   int index;
   int rp_value ;
+  bool obl_tag;
 }entry;
 
 void print_address(u_int addr, const char* msj="");
