@@ -17,7 +17,7 @@
 #define ADDRSIZE 32
 using namespace std;
 
-int lru_replacement_policy_l1_vc(const l1_vc_entry_info *l1_vc_info,
+int lru_replacement_policy_l1_vc(const entry_info *l1_vc_info,
     	                      	 bool loadstore,
        	                    	 entry* l1_cache_blocks,
        	                  	 entry* vc_cache_blocks,

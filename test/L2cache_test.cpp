@@ -25,7 +25,7 @@ class L2cache : public ::testing::Test{
 
 
 /*
- * TEST1: l1_hit_l2_hit
+ * TEST3:
  * 1. Se genera una configuración aleatoria de cache
  * 2. Se calculan los sizes
  * 3. Se genera un acceso aleatorio A
@@ -145,7 +145,7 @@ TEST_F(L2cache,l1_hit_l2_hit){
 
 
 /*
- * TEST2: l1_miss_l2_hit
+ * TEST4:
  * 1. Se genera una configuración aleatoria de cache
  * 2. Se calculan los sizes
  * 3. Se genera un acceso aleatorio A
@@ -239,7 +239,7 @@ TEST_F(L2cache,l1_miss_l2_hit){
 
 
 /*
- * TEST3: l1_miss_l2_miss
+ * TEST5:
  * 1. Se genera una configuración aleatoria de cache
  * 2. Se calculan los sizes
  * 3. Se genera un acceso aleatorio A

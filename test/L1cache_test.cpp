@@ -10,6 +10,8 @@
 #include <debug_utilities.h>
 #include <L1cache.h>
 
+
+
 class L1cache : public ::testing::Test{
     protected:
 	int debug_on;
@@ -42,7 +44,7 @@ TEST_F(L1cache, hit_miss_srrip){
   enum miss_hit_status expected_miss_hit;
   bool loadstore = 1;
   bool debug = 0;
-  struct operation_result result = {};
+  operation_result result = {};
 
   /* Fill a random cache entry */
   idx = rand()%1024;
@@ -55,9 +57,9 @@ TEST_F(L1cache, hit_miss_srrip){
           associativity);
   }
  
-  struct entry cache_line[associativity];
+  entry cache_line[associativity];
   /* Check for a miss */
-  DEBUG(Checking miss operation);
+  DEBUG(debug_on,Checking miss operation);
   for (i = 0 ; i < 2; i++){
     /* Fill cache line */
     for ( i =  0; i < associativity; i++) {
@@ -87,7 +89,7 @@ TEST_F(L1cache, hit_miss_srrip){
    * Check for hit: block was replaced in last iteration, if we used the same 
    * tag now we will get a hit
    */
-  DEBUG(Checking hit operation);
+  DEBUG(debug_on,hecking hit operation);
   for (i = 0 ; i < 2; i++){
     loadstore = (bool)i;
     status = srrip_replacement_policy(idx, 

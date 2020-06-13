@@ -25,8 +25,7 @@ class VCcache : public ::testing::Test{
 		};
 };
 
- /* 
- * TEST1: l1_miss_vc_hit
+ /*
  * 1. Se genera una configuración aleatoria de cache
  * 2. Se calculan los sizes
  * 3. Se genera un acceso aleatorio A
@@ -118,7 +117,6 @@ TEST_F(VCcache,l1_miss_vc_hit){
  }
 
  /*
- * TEST2: l1_miss_vc_miss
  * 1. Se genera una configuración aleatoria de cache
  * 2. Se calculan los sizes
  * 3. Se genera un acceso aleatorio A
