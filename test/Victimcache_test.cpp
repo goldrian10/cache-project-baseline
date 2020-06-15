@@ -177,7 +177,7 @@ TEST_F(VCcache,l1_miss_vc_hit){
  	for (size_t i = 0; i < (sizes.l1_assoc + sizes.vc_assoc); i++){
 		line_info  access = random_access();
 		entry_info B = get_entry_info(access.address,sizes);
-		while(A.l1_tag == B.l1_tag || A.l1_idx != B.l1_idx || is_in_set(l1_cache_blocks,B.l1_assoc,B.l1_tag)){
+		while(A.l1_tag == B.l1_tag || A.l1_idx != B.l1_idx || is_in_set(l1_cache_blocks,B.l1_assoc,B.l1_tag) || is_in_set(vc_cache_blocks,B.vc_assoc,B.l1_tag)){
 			access = random_access();
 			B = get_entry_info(access.address,sizes);
 		}
