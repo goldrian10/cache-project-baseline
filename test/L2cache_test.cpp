@@ -280,7 +280,7 @@ TEST_F(L2cache,l1_miss_l2_miss){
 	for (size_t i = 0; i < sizes.l2_assoc; i++){
 		line_info  access = random_access();
 		entry_info B = get_entry_info(access.address,sizes);
-		while(A.l1_tag == B.l1_tag || A.l1_idx != B.l1_idx || is_in_set(l1_cache_blocks,B.l1_assoc,B.l1_tag)){
+		while(A.l1_tag == B.l1_tag || A.l1_idx != B.l1_idx || is_in_set(l1_cache_blocks,B.l1_assoc,B.l1_tag || is_in_set(l2_cache_blocks,B.l2_assoc,B.l1_tag))){
 			access = random_access();
 			B = get_entry_info(access.address,sizes);
 		}
