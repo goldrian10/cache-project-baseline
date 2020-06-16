@@ -103,7 +103,7 @@ struct cache_field_size {
  *
  * [out] cache_field_size: Struct containing tag, idx and offset size
  */
-int field_size_get(struct cache_pararms cache_params,
+int field_size_get(struct cache_params cache_params,
                    struct cache_field_size *field_size);
 
 /* 
@@ -118,8 +118,8 @@ int field_size_get(struct cache_pararms cache_params,
 
 void address_tag_idx_get(long address,
                          struct cache_field_size field_size,
-                         int &idx,
-                         int &tag);
+                         int *idx,
+                         int *tag);
 
 
 /* 
