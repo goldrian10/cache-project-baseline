@@ -108,7 +108,7 @@ TEST_F(OBLcache, miss_prefetch) {
    }
  }
  EXPECT_TRUE(line_found);
- EXPECT_TRUE(line_A_obl);
+ EXPECT_TRUE(line_A_next_obl);
  EXPECT_FALSE(dirty);
 
 }
@@ -130,7 +130,6 @@ TEST_F(OBLcache, hit_no_prefetch) {
   bool loadstore = bool(rand()%2);
   bool line_found = false;
   bool line_A_obl = false;
-  bool line_A_next_obl = false;
   bool dirty = true;
   int associativity = 1 << (rand()%4);
   
@@ -268,6 +267,6 @@ TEST_F(OBLcache, hit_prefetch) {
    }
  }
  EXPECT_TRUE(line_found);
- EXPECT_TRUE(line_A_obl);
+ EXPECT_TRUE(line_A_next_obl);
  EXPECT_FALSE(dirty);
 }
