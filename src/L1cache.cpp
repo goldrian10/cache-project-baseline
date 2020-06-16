@@ -28,7 +28,6 @@ int field_size_get(struct cache_params cache_params,
   //offset size log2(block_size)
   field_size->offset=log2(cache_params.block_size);
   //idx size = log2(sets/a)
-  
   field_size->idx=log2((cache_params.size*1024)/cache_params.block_size/cache_params.asociativity);
   //tag = ADDRSIZE - offset - idx
   field_size->tag=32-field_size->offset-field_size->idx;
@@ -45,8 +44,6 @@ void address_tag_idx_get(long address,
 	string tagstr,idxstr;
     tagstr=pcstr.substr(4, field_size.tag);
     idxstr=pcstr.substr((field_size.tag), field_size.idx);
-    //offset=prueba.substr(field_size.idx, field_size.offset);
-    //cout<<"tagstr:"<<tagstr<<endl;
     *tag=static_cast<int>(bitset<32>(tagstr).to_ulong());
     *idx=static_cast<int>(bitset<32>(idxstr).to_ulong());
 
@@ -60,6 +57,92 @@ int srrip_replacement_policy (int idx,
                              operation_result* result,
                              bool debug)
 {
+	//se inicializa el resultado en miss
+	
+	bool state=false;
+	
+	for(int cache_pos = 0; cache_pos < associativity; cache_pos++){
+		if(cache_blocks[cache_pos].valid==1){
+			//si el bit de valido esta en 1 se revisa este bloque, si no se sigue
+			if(cache_blocks[cache_pos].tag==tag){
+				state = true;
+				//se revisa si hay un hit y luego revisa si la instruccion es store
+				if(loadstore==1){
+					cache_blocks[cache_pos].dirty = true;
+					result -> miss_hit = HIT_STORE;
+				}
+				else{
+					result -> miss_hit = HIT_LOAD;
+				}
+				
+				//se se guarda el valor de 0 en el rrp bit				
+				cache_blocks[cache_pos].rp_value=0;
+			}
+			
+			
+			
+			
+		}
+	}
+	
+	//miss
+	
+	
+	if(state==false){
+			int rrp=0;
+			bool reset=true;
+			int M=2;
+			if(associativity <=2)M=1;
+			int entrada = pow(2,M)-2;
+			int distante = pow(2,M)-1;
+			//busca el primer (2**M-1) en el rrp bit de izquierda a derecha y guarda la posicion en rrp 
+			//reset es true si no hay ningun (2**M-1) en los rrp bits 
+			while(reset==true){	
+				for(int i=0; i<associativity;i++){
+					if(cache_blocks[i].rp_value == distante){
+						rrp=i;
+						reset=false;
+						break;
+					}
+				}
+					//si no hay ningun distante entonces se suma 1 a todos los bloques
+				if(reset==true){
+					for(int i=0; i<associativity;i++){
+						cache_blocks[i].rp_value ++;
+					}
+				}
+			}
+			
+			cache_blocks[rrp].rp_value=entrada;
+			
+			
+			//si se desaloja,se guardan los valores del bloque en los eviction
+			if(cache_blocks[rrp].valid){
+				result->dirty_eviction = cache_blocks[rrp].dirty;
+				result->evicted_address = cache_blocks[rrp].tag;
+			}
+			
+			cache_blocks[rrp].tag = tag;
+			cache_blocks[rrp].valid =1;
+			
+			//si fue store se  actualiza el dirty bit y result
+			if(loadstore==1){
+				cache_blocks[rrp].dirty = true;
+				result -> miss_hit = MISS_STORE;
+			}
+			else{
+				result -> miss_hit = MISS_LOAD;
+			}
+			
+			
+			return OK;
+		}
+	/*if(state==true){
+		cout <<"hit"<<endl;
+	}else cout <<"miss"<<endl;
+	*/
+	
+	
    return ERROR;
 }
 
@@ -93,8 +176,6 @@ int lru_replacement_policy (int idx,
 					}
 					//se les hace update a los valores del LRU 
 					
-					
-					
 					for(int i = 0; i < associativity; i++){
 					if(cache_blocks[i].rp_value < cache_blocks[cache_pos].rp_value){
 						cache_blocks[i].rp_value++;
@@ -114,7 +195,6 @@ int lru_replacement_policy (int idx,
 		if(state==false){
 				int lru=0;
 			
-				
 				//busca el rp mayor para remplazarlo por el nuevo tag
 				for(int i=0; i<associativity;i++){
 					if(cache_blocks[i].rp_value > cache_blocks[lru].rp_value){

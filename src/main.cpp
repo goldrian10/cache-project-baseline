@@ -82,6 +82,12 @@ int main(int argc, char * argv []) {
 			if(RP==NRU){
 				cache_blocks[i][j].rp_value=1;
 				}
+			if(RP==RRIP){
+				int M=2;
+				if(cache_params.asociativity <= 2)M=1;
+				
+				cache_blocks[i][j].rp_value=pow(2,M)-1;
+			}
 			cache_blocks[i][j].valid = 0;
 			cache_blocks[i][j].tag = 0;
 			cache_blocks[i][j].dirty = 0;
@@ -96,15 +102,9 @@ int main(int argc, char * argv []) {
 	ss >> n;
 	bitset<32> b(n);
 	long bulong=b.to_ulong();
-    //cout <<"\npc number:"<< pc<< endl;
-	//cout<<"pc bin:"<<b<<endl;
 	address_tag_idx_get(bulong,field_size, &idx,&tag);
 	string loadstore = trace1.substr(2,1);
 	ls=stoi(loadstore);
-    //printf("tag len:%d\nindex len:%d\noffset len:%d\n",field_size.tag,field_size.idx,field_size.offset);
-    //cout <<"\ntag:"<<tag<<endl;
-    //cout <<"offset:"<<offset<<endl;
-    //cout <<"idx:"<<idx<<endl;
     
    
     switch(RP){
