@@ -28,7 +28,7 @@ int field_size_get(struct cache_params cache_params,
   //offset size log2(block_size)
   field_size->offset=log2(cache_params.block_size);
   //idx size = log2(sets/a)
-  field_size->idx=log2((cache_params.size*1024)/cache_params.block_size/cache_params.asociativity);
+  field_size->idx=log2((cache_params.size*KB)/cache_params.block_size/cache_params.asociativity);
   //tag = ADDRSIZE - offset - idx
   field_size->tag=32-field_size->offset-field_size->idx;
   return OK;
@@ -177,11 +177,11 @@ int lru_replacement_policy (int idx,
 					//se les hace update a los valores del LRU 
 					
 					for(int i = 0; i < associativity; i++){
-					if(cache_blocks[i].rp_value < cache_blocks[cache_pos].rp_value){
-						cache_blocks[i].rp_value++;
+						if(cache_blocks[i].rp_value > cache_blocks[cache_pos].rp_value){
+							cache_blocks[i].rp_value--;
+						}
 					}
-					cache_blocks[cache_pos].rp_value=0;
-				}
+				cache_blocks[cache_pos].rp_value=associativity-1;
 				break;
 				
 				}
@@ -194,14 +194,12 @@ int lru_replacement_policy (int idx,
 		
 		if(state==false){
 				int lru=0;
-			
 				//busca el rp mayor para remplazarlo por el nuevo tag
 				for(int i=0; i<associativity;i++){
-					if(cache_blocks[i].rp_value > cache_blocks[lru].rp_value){
+					if(cache_blocks[i].rp_value < cache_blocks[lru].rp_value){
 						lru=i;
 					}
 				}
-				cache_blocks[lru].rp_value=0;
 				
 				
 				//si se desaloja,se guardan los valores del bloque en los eviction
@@ -225,13 +223,11 @@ int lru_replacement_policy (int idx,
 				//se remplazan los valores nuevos de LRU 
 				
 				for(int i = 0; i < associativity; i++){
-					if(i==lru){
-						continue;
-						//cache_blocks[i].rp_value = 0;
+					if(cache_blocks[i].rp_value > cache_blocks[lru].rp_value){
+						cache_blocks[i].rp_value--;
 					}
-					cache_blocks[i].rp_value++;
 				}
-				
+				cache_blocks[lru].rp_value= associativity -1;
 				
 				return OK;
 			}
@@ -243,6 +239,7 @@ int lru_replacement_policy (int idx,
 		
    return ERROR;
 }
+
 int nru_replacement_policy(int idx,
                            int tag,
                            int associativity,
