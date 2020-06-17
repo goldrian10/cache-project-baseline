@@ -72,17 +72,16 @@ int srrip_replacement_policy (int idx,
 					result -> miss_hit = HIT_STORE;
 				}
 				else{
+					cache_blocks[cache_pos].dirty = false;
 					result -> miss_hit = HIT_LOAD;
 				}
 				
 				//se se guarda el valor de 0 en el rrp bit				
 				cache_blocks[cache_pos].rp_value=0;
+				return OK;
 			}
-			
-			
-			
-			
 		}
+		
 	}
 	
 	//miss
