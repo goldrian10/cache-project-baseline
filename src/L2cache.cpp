@@ -49,7 +49,7 @@ int l1_l2_entry_info_get (const struct cache_params l1_params,
 
 	
 	
-	
+	//se obtienen los valores del tag y del indice, tanto para L1 como para L2
 	int sizeTag, sizeIdx, sizeOff,tag,idx;
 	
 	sizeOff=log2(l1_params.block_size);
@@ -93,6 +93,8 @@ int lru_replacement_policy_l1_l2(const entry_info *l1_l2_info,
 				 operation_result* l2_result,
 				 bool debug) 
 {	
+	
+	//El primer caso a analizar va a ser un hit en L1 por ende hay tambien un hit en L2
 	int l2_pos=0;
 	bool hitl1 = false, missl2 = false;
 	for(int l1_pos = 0; l1_pos < l1_l2_info -> l1_assoc; l1_pos++){

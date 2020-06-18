@@ -59,15 +59,14 @@ int srrip_replacement_policy (int idx,
 {
 	if(tag < 0 || idx < 0 || associativity < 1)return PARAM;
 	//se inicializa el resultado en miss
-	
 	bool state=false;
-	
+	//se recorre el cache buscando si hay un hit
 	for(int cache_pos = 0; cache_pos < associativity; cache_pos++){
 		if(cache_blocks[cache_pos].valid==1){
 			//si el bit de valido esta en 1 se revisa este bloque, si no se sigue
 			if(cache_blocks[cache_pos].tag==tag){
 				state = true;
-				//se revisa si hay un hit y luego revisa si la instruccion es store
+				//se revisa si hay un hit y luego revisa si la instruccion es store para modificar los resultados
 				if(loadstore==1){
 					cache_blocks[cache_pos].dirty = true;
 					result -> miss_hit = HIT_STORE;
@@ -90,13 +89,15 @@ int srrip_replacement_policy (int idx,
 	if(state==false){
 			int rrp=0;
 			bool reset=true;
+			//se modifica M de acuerdo a lo especificado
 			int M;
 			if(associativity <=2)M=1;
 			if(associativity > 2)M=2;
+			//estas variables son los valores rp con los que va a entrar el bloque nuevo y el distante que es el proximo a salir
 			int entrada = pow(2,M)-2;
 			int distante = pow(2,M)-1;
-			//busca el primer (2**M-1) en el rrp bit de izquierda a derecha y guarda la posicion en rrp 
-			//reset es true si no hay ningun (2**M-1) en los rrp bits 
+			//busca el primer distante en el rrp bit de izquierda a derecha y guarda la posicion en rrp 
+			//reset es true si no hay ningun distante en los rrp bits 
 			while(reset==true){	
 				for(int i=0; i<associativity;i++){
 					if(cache_blocks[i].rp_value == distante){
@@ -119,7 +120,7 @@ int srrip_replacement_policy (int idx,
 				result->dirty_eviction = cache_blocks[rrp].dirty;
 				result->evicted_address = cache_blocks[rrp].tag;
 			}
-			
+			//update a los valores del nuevo bloque 
 			cache_blocks[rrp].rp_value=entrada;
 			cache_blocks[rrp].tag = tag;
 			cache_blocks[rrp].valid =1;
@@ -137,12 +138,6 @@ int srrip_replacement_policy (int idx,
 			
 			return OK;
 		}
-	/*if(state==true){
-		cout <<"hit"<<endl;
-	}else cout <<"miss"<<endl;
-	*/
-	
-	
    return ERROR;
 }
 
@@ -159,10 +154,9 @@ int lru_replacement_policy (int idx,
 			return PARAM;
 		}
 		//se inicializa el resultado en miss
-		
 		bool state=false;
-			
 		
+		//se recorre el cache buscando si hay un hit
 		for(int cache_pos = 0; cache_pos < associativity; cache_pos++){
 			if(cache_blocks[cache_pos].valid==1){
 				//si el bit de valido esta en 1 se revisa este bloque, si no se sigue
@@ -211,7 +205,7 @@ int lru_replacement_policy (int idx,
 					result->dirty_eviction = cache_blocks[lru].dirty;
 					result->evicted_address = cache_blocks[lru].tag;
 				}
-				
+				//se actualizan los valores del nuevo bloque
 				cache_blocks[lru].tag = tag;
 				cache_blocks[lru].valid = 1;
 				
@@ -235,13 +229,7 @@ int lru_replacement_policy (int idx,
 				cache_blocks[lru].rp_value= associativity -1;
 				
 				return OK;
-			}
-		/*if(state==true){
-			cout <<"hit"<<endl;
-		}else cout <<"miss"<<endl;
-		*/
-		
-		
+			}	
    return ERROR;
 }
 
@@ -257,7 +245,7 @@ int nru_replacement_policy(int idx,
 	//se inicializa el resultado en miss
 	
 	bool state=false;
-	
+	//se recorre el cache buscando si hay un hit
 	for(int cache_pos = 0; cache_pos < associativity; cache_pos++){
 		if(cache_blocks[cache_pos].valid==1){
 			//si el bit de valido esta en 1 se revisa este bloque, si no se sigue
@@ -273,15 +261,10 @@ int nru_replacement_policy(int idx,
 				}
 				
 				//se les hace update a los valores del NRU bit 
-				
-				
+				//en este caso comienzan en 0
 				cache_blocks[cache_pos].rp_value=0;
 				return OK;
 			}
-			
-			
-			
-			
 		}
 	}
 	
@@ -318,7 +301,7 @@ int nru_replacement_policy(int idx,
 				result->dirty_eviction = cache_blocks[nru].dirty;
 				result->evicted_address = cache_blocks[nru].tag;
 			}
-			
+			//se actualizan los valores del nuevo bloque
 			cache_blocks[nru].tag = tag;
 			cache_blocks[nru].valid =1;
 			
@@ -335,12 +318,5 @@ int nru_replacement_policy(int idx,
 			
 			return OK;
 		}
-	/*if(state==true){
-		cout <<"hit"<<endl;
-	}else cout <<"miss"<<endl;
-	*/
-	
-	
    return ERROR;
-   
 }
