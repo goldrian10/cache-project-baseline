@@ -16,7 +16,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
-#include "L1cache.h"
+#include <L1cache.h>
 
 #define BUFFER_SIZE 32
 #define VC_SIZE 16

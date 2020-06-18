@@ -6,6 +6,7 @@
 #define L2CACHE_H
 
 #include "L1cache.h"
+#include <utilities.h>
 /*
  * STRUCTS
  */
@@ -38,9 +39,9 @@ struct l1_l2_entry_info {
  */
 int l1_l2_entry_info_get (const struct cache_params l1_params,
                           const struct cache_params l2_params,
-			  long address,
+						  long address,
                           entry_info* l1_l2_info,
-			  bool debug=false);
+						  bool debug=false);
 /* 
  * Search for an address in a cache set and
  * replaces blocks using LRU policy and a updates L2 cache 
@@ -56,10 +57,10 @@ int l1_l2_entry_info_get (const struct cache_params l1_params,
  * [out] result: result of the operation (returns_types)
  */
 int lru_replacement_policy_l1_l2(const entry_info *l1_l2_info,
-				 bool loadstore,
-				 entry* l1_cache_blocks,
-				 entry* l2_cache_blocks,
-				 operation_result* l1_result,
-				 operation_result* l2_result,
-				 bool debug=false);
+								 bool loadstore,
+								 entry* l1_cache_blocks,
+								 entry* l2_cache_blocks,
+								 operation_result* l1_result,
+								 operation_result* l2_result,
+								 bool debug=false);
 #endif

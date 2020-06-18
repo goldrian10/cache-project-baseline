@@ -57,14 +57,13 @@ int main(int argc, char * argv []) {
   enum replacement_policy RP;
 
   sscanf(argv[2], "%d",&size);
-  sscanf(argv[4], "%d",&block_size);
-  sscanf(argv[6],"%d",&asociativity);
+  sscanf(argv[4],"%d",&asociativity);
+  sscanf(argv[6], "%d",&block_size);
   sscanf(argv[8],"%c",&rp_value);
   
   if(rp_value=='0') RP=LRU;
   if(rp_value=='1') RP=NRU;
   if(rp_value=='2') RP=RRIP;
-  if(rp_value=='3') RP=RANDOM;
   
   cache_params.size=size;
   cache_params.block_size=block_size;
@@ -118,6 +117,7 @@ int main(int argc, char * argv []) {
 			srrip_replacement_policy (idx, tag, cache_params.asociativity, ls, cache_blocks[idx], &result, false);
 		break;
 		default:
+		return 1;
 		cout<<"ERROR RP"<<endl;
 	 }
 	 

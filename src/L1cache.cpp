@@ -57,6 +57,7 @@ int srrip_replacement_policy (int idx,
                              operation_result* result,
                              bool debug)
 {
+	if(tag < 0 || idx < 0 || associativity < 1)return PARAM;
 	//se inicializa el resultado en miss
 	
 	bool state=false;
@@ -89,8 +90,9 @@ int srrip_replacement_policy (int idx,
 	if(state==false){
 			int rrp=0;
 			bool reset=true;
-			int M=2;
+			int M;
 			if(associativity <=2)M=1;
+			if(associativity > 2)M=2;
 			int entrada = pow(2,M)-2;
 			int distante = pow(2,M)-1;
 			//busca el primer (2**M-1) en el rrp bit de izquierda a derecha y guarda la posicion en rrp 
@@ -103,6 +105,8 @@ int srrip_replacement_policy (int idx,
 						break;
 					}
 				}
+				
+			
 					//si no hay ningun distante entonces se suma 1 a todos los bloques
 				if(reset==true){
 					for(int i=0; i<associativity;i++){
@@ -110,16 +114,13 @@ int srrip_replacement_policy (int idx,
 					}
 				}
 			}
-			
-			cache_blocks[rrp].rp_value=entrada;
-			
-			
 			//si se desaloja,se guardan los valores del bloque en los eviction
-			if(cache_blocks[rrp].valid){
+			if(cache_blocks[rrp].valid==1){
 				result->dirty_eviction = cache_blocks[rrp].dirty;
 				result->evicted_address = cache_blocks[rrp].tag;
 			}
 			
+			cache_blocks[rrp].rp_value=entrada;
 			cache_blocks[rrp].tag = tag;
 			cache_blocks[rrp].valid =1;
 			
@@ -130,6 +131,7 @@ int srrip_replacement_policy (int idx,
 			}
 			else{
 				result -> miss_hit = MISS_LOAD;
+				cache_blocks[rrp].dirty = false;
 			}
 			
 			
@@ -153,6 +155,9 @@ int lru_replacement_policy (int idx,
                              operation_result* result,
                              bool debug)
 {
+		if(tag < 0 || idx < 0 || associativity <1){
+			return PARAM;
+		}
 		//se inicializa el resultado en miss
 		
 		bool state=false;
@@ -165,7 +170,7 @@ int lru_replacement_policy (int idx,
 					state = true;
 					
 					//se revisa si hay un hit y luego revisa si la instruccion es store
-					if(loadstore){
+					if(loadstore==1){
 						cache_blocks[cache_pos].dirty = true;
 						result -> miss_hit = HIT_STORE;
 					}
@@ -180,9 +185,10 @@ int lru_replacement_policy (int idx,
 						}
 					}
 				cache_blocks[cache_pos].rp_value=associativity-1;
-				break;
 				
+				return OK;
 				}
+				
 				
 			}
 		}
@@ -207,7 +213,7 @@ int lru_replacement_policy (int idx,
 				}
 				
 				cache_blocks[lru].tag = tag;
-				cache_blocks[lru].valid =1;
+				cache_blocks[lru].valid = 1;
 				
 				//si fue store se  actualiza el dirty bit y result
 				if(loadstore==1){
@@ -215,6 +221,7 @@ int lru_replacement_policy (int idx,
 					result -> miss_hit = MISS_STORE;
 				}
 				else{
+					cache_blocks[lru].dirty = false;
 					result -> miss_hit = MISS_LOAD;
 				}
 				
@@ -246,6 +253,7 @@ int nru_replacement_policy(int idx,
                            operation_result* result,
                            bool debug)
 {
+	if(tag < 0 || idx < 0 || associativity < 1)return PARAM;
 	//se inicializa el resultado en miss
 	
 	bool state=false;
@@ -268,6 +276,7 @@ int nru_replacement_policy(int idx,
 				
 				
 				cache_blocks[cache_pos].rp_value=0;
+				return OK;
 			}
 			
 			
@@ -320,6 +329,7 @@ int nru_replacement_policy(int idx,
 			}
 			else{
 				result -> miss_hit = MISS_LOAD;
+				cache_blocks[nru].dirty = false;
 			}
 			
 			

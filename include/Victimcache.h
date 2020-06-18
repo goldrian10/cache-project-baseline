@@ -5,20 +5,20 @@
 
 #ifndef VCACHE_H
 #define VCACHE_H
-
+#include <utilities.h>
 /*
  * STRUCTS
  */
 
 /* L1 and VC info */
-/*
+
 struct l1_vc_entry_info {
 	int l1_tag;
 	int l1_idx;
 	int l1_associativity;
     int vc_associativity;
 };
-*/
+
 
 /* 
  *  Functions
@@ -40,10 +40,10 @@ struct l1_vc_entry_info {
  */
 int lru_replacement_policy_l1_vc(const entry_info *l1_vc_info,
       	                      	 bool loadstore,
-        	                 entry* l1_cache_blocks,
-          	                 entry* vc_cache_blocks,
+								 entry* l1_cache_blocks,
+								 entry* vc_cache_blocks,
             	                 operation_result* l1_result,
               	              	 operation_result* vc_result,
-                	         bool debug=false);
+								 bool debug=false);
 
 #endif
