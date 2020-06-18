@@ -30,7 +30,7 @@ int field_size_get(struct cache_params cache_params,
   //idx size = log2(sets/a)
   field_size->idx=log2((cache_params.size*KB)/cache_params.block_size/cache_params.asociativity);
   //tag = ADDRSIZE - offset - idx
-  field_size->tag=32-field_size->offset-field_size->idx;
+  field_size->tag=ADDRSIZE-field_size->offset-field_size->idx;
   return OK;
 }
 
@@ -42,7 +42,7 @@ void address_tag_idx_get(long address,
 	bitset<32> b(address);
 	string pcstr = b.to_string();
 	string tagstr,idxstr;
-    tagstr=pcstr.substr(4, field_size.tag);
+    tagstr=pcstr.substr(0, field_size.tag);
     idxstr=pcstr.substr((field_size.tag), field_size.idx);
     *tag=static_cast<int>(bitset<32>(tagstr).to_ulong());
     *idx=static_cast<int>(bitset<32>(idxstr).to_ulong());
@@ -72,7 +72,6 @@ int srrip_replacement_policy (int idx,
 					result -> miss_hit = HIT_STORE;
 				}
 				else{
-					cache_blocks[cache_pos].dirty = false;
 					result -> miss_hit = HIT_LOAD;
 				}
 				
@@ -193,7 +192,7 @@ int lru_replacement_policy (int idx,
 		
 		if(state==false){
 				int lru=0;
-				//busca el rp mayor para remplazarlo por el nuevo tag
+				//busca el rp menor para remplazarlo por el nuevo tag
 				for(int i=0; i<associativity;i++){
 					if(cache_blocks[i].rp_value < cache_blocks[lru].rp_value){
 						lru=i;
