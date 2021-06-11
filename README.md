@@ -1,6 +1,6 @@
 # Advance cache simulator project baseline
 
-Code baseline for IE0521 cache simulation project
+Code baseline for cache simulation project
 
 
 ## How to build the project
